@@ -15,11 +15,11 @@ Let’s say you've decided to take the downloaded image from the server and disp
 
 Let's return to gallery. Probably you’ve tested the application on different image sets using Simulator and latest iPhone version. And now ready for QA stage. Beta-testers and QA engineers picking up your application and then you see this strange-looking crash reports:
 
-![](https://github.com/SezorusArticles/Article_KZ004/blob/master/images/image7.png)
+![](https://github.com/2ZGroupSolutionsArticles/Article_KZ004/blob/master/images/image7.png)
 
 You are starting to test your app with a specific image set and see this:  
 
-![](https://github.com/SezorusArticles/Article_KZ004/blob/master/images/image5.png)
+![](https://github.com/2ZGroupSolutionsArticles/Article_KZ004/blob/master/images/image5.png)
 
 Virtually every WWDC session dedicated to the performance best practices say that iOS application should use as little memory as possible. Memory is the most constrained resource on iOS. The System may ask for free memory faster than it could be released. As says [the documentation](https://developer.apple.com/library/archive/documentation/Performance/Conceptual/ManagingMemory/Articles/AboutMemory.html) and this WWDC [session](https://developer.apple.com/videos/play/wwdc2018/416/) iOS does not have the traditional disk swap, instead it use the memory compressor technic.
 
@@ -38,7 +38,7 @@ On the WWDC session: [Image and Graphics Best Practices](https://developer.apple
 3.  Render decoded image.
 
 
-![](https://github.com/SezorusArticles/Article_KZ004/blob/master/images/image3.png)
+![](https://github.com/2ZGroupSolutionsArticles/Article_KZ004/blob/master/images/image3.png)
 
 Let’s make a stop here. We need to understand what the image is, what kind and formats of images do we have and how does the stored.
 
@@ -48,11 +48,11 @@ First of all, there are 2 main types of images: raster (bitmap) and vector. Rast
 
 Raster and Vector images have their own set of pros and cons and usually used for different purposes. Vector usually used for images that will be applied on a physical product, logos, technical drawings, text, icons, something which contains sharp geometric shapes. The main advantage of a vector image is resolution independence. This means scalability without losing sharpness and quality. Vector images use mathematical calculations from one point to another that form lines and shapes, that’s why it produces the same result for every resolution and zoom.
 
-![](https://github.com/SezorusArticles/Article_KZ004/blob/master/images/image9.png)
+![](https://github.com/2ZGroupSolutionsArticles/Article_KZ004/blob/master/images/image9.png)
 
 Raster image consists of a particular amount of pixels. When you zoom raster image it becomes blurry and jagged. But raster image works better with a complicated scene like photos. Photo editing, for example, is better with a raster image. This happens because raster images use a large number of pixels of different colors. By changing the color of each pixel different shades and gradation can be reached.
 
-![](https://github.com/SezorusArticles/Article_KZ004/blob/master/images/image4.png)
+![](https://github.com/2ZGroupSolutionsArticles/Article_KZ004/blob/master/images/image4.png)
 
 Origin image by [Printeboek](https://pixabay.com/photos/spring-blossom-flowers-pink-nature-2854205/) on Pixabay  
 
@@ -93,7 +93,7 @@ The pixel format consists of the [following information:](https://developer.appl
 
 32-bit pixel format for RGBA color spaces in Quartz 2D, taken from the official [documentation](https://developer.apple.com/library/archive/documentation/GraphicsImaging/Conceptual/drawingwithquartz2d/dq_images/dq_images.html):
 
-![](https://github.com/SezorusArticles/Article_KZ004/blob/master/images/image1.png)
+![](https://github.com/2ZGroupSolutionsArticles/Article_KZ004/blob/master/images/image1.png)
 
 The [default color space on iOS](https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/) is Standard RGB (sRGB) which produces 4 bytes per pixel. To calculate the size of the image buffer we need to take the size of single pixel color information in the particular color space and multiply on the total amount of pixels in the image. Let’s consider the real case. I took a JPG image, its resolution is 3024 x 4032, size is 3.1 MB. The amount of allocated memory in this case should be:
 
@@ -121,18 +121,18 @@ vmmap --summary ImagePerfomanceTest.memgraph
 
 Memory consumption test result for PNG image:
 
-![](https://github.com/SezorusArticles/Article_KZ004/blob/master/images/image12.png)
+![](https://github.com/2ZGroupSolutionsArticles/Article_KZ004/blob/master/images/image12.png)
 The allocation stack trace look next:
 
-![](https://github.com/SezorusArticles/Article_KZ004/blob/master/images/image10.png)
+![](https://github.com/2ZGroupSolutionsArticles/Article_KZ004/blob/master/images/image10.png)
 
 So 14.2 MB PNG image of on-disk file size becomes 46.5 MB in virtual memory. Same results reproduced either on device and iOS simulator.
 
 With JPG image things become tricker. On the iOS simulator, I’ve got the same memory consumption for JPG as for PNG (46.5 MB). But on a real device, I’ve got this:
 
-![](https://github.com/SezorusArticles/Article_KZ004/blob/master/images/image13.png)
+![](https://github.com/2ZGroupSolutionsArticles/Article_KZ004/blob/master/images/image13.png)
 The allocation stack trace for JPG image:
-![](https://github.com/SezorusArticles/Article_KZ004/blob/master/images/image2.png)
+![](https://github.com/2ZGroupSolutionsArticles/Article_KZ004/blob/master/images/image2.png)
 
 As you can see the physical footprint and memory allocation stack trace are different. JPG with same image resolution requres less memory consumtion. Instead of expected 46.5 MB there is 17.6M in [IOSurface](https://developer.apple.com/documentation/iosurface).
 
@@ -149,7 +149,7 @@ Same approach could be used on your custom server as well. Moreover, this approa
 
 2. If you don’t have opportunities to download a downsampled image, you need to do it yourself. There the number of different approaches to resizing an image, but keep in mind that you need to do it without load the whole image into memory. Image rendering flow, in this case, will look like this:
 
-![](https://github.com/SezorusArticles/Article_KZ004/blob/master/images/image11.png)
+![](https://github.com/2ZGroupSolutionsArticles/Article_KZ004/blob/master/images/image11.png)
 
 
 [CGImageSource](https://developer.apple.com/documentation/imageio/cgimagesource-r84) objects abstract the data-reading task, reduces the need to manage data through a raw memory buffer.  CGImageSource can load data from URL, a CFData object, or a data consumer.
@@ -192,7 +192,7 @@ Here’s what the code does:
 
 More information about this technique you can find in the documentation section [Creating and Using Image Sources](https://developer.apple.com/library/archive/documentation/GraphicsImaging/Conceptual/ImageIOGuide/imageio_source/ikpg_source.html) and WWDC session: [Image and Graphics Best Practices](https://developer.apple.com/videos/play/wwdc2018/219/).
 
-![](https://github.com/SezorusArticles/Article_KZ004/blob/master/images/image8.png)
+![](https://github.com/2ZGroupSolutionsArticles/Article_KZ004/blob/master/images/image8.png)
 
 Memory significantly consumption improved.
 
@@ -207,7 +207,7 @@ For the better user experience and smooth scrolling, it makes sense to:
 
   
 
-The demo with collection view based gallery, downsampling images technique and prefetching Collection View Data available [here](https://github.com/SezorusArticles/Article_KZ004).
+The demo with collection view based gallery, downsampling images technique and prefetching Collection View Data available [here](https://github.com/2ZGroupSolutionsArticles/Article_KZ004).
 
   
 
@@ -217,6 +217,6 @@ Thank you for your time.
 
 Kseniia Zozulia
 
-Email:  [kseniiazozulia@sezorus.com](mailto:kseniiazozulia@sezorus.com)
+Email:  [kseniiazozulia@2zgroup.net](mailto:kseniiazozulia@2zgroup.net)
 
 LinkedIn:  [Kseniia Zozulia](https://www.linkedin.com/in/629bb187)
